@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
+
 function index() {
   const [toggle, setToggle] = useState(false);
   const authCtx = useContext(authContext);
@@ -29,7 +32,7 @@ function index() {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const response = await axios.get(`http://localhost:3000/users/role/${email}`, {
+        const response = await axios.get(`${API_URL}/users/role/${email}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

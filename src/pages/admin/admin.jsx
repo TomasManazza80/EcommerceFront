@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
+
+
 
 const Admin = () => {
   const [productosVendidos, setProductosVendidos] = useState([
@@ -10,6 +14,11 @@ const Admin = () => {
     { id: 3, nombre: 'Producto 3', fecha: '2024-12-03', cantidad: 8 },
     // Más datos de ejemplo...
   ]);
+
+  const [showForm, setShowForm] = useState(false);
+  const [productoAEditar, setProductoAEditar] = useState(null);
+
+
 
   const [todosMisProductos, setTodosMisProductos] = useState([]);
   const [nuevoProducto, setNuevoProducto] = useState({ nombre: '', precio: 0, marca: '', categoria: '', cantidad: 0, talle: '', imagenes: [] });
@@ -31,7 +40,7 @@ const Admin = () => {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/products');
+        const response = await axios.get(`${API_URL}/products`);
         setTodosMisProductos(response.data);
       } catch (error) {
         console.error('Error al obtener los productos:', error);
@@ -72,7 +81,7 @@ const Admin = () => {
   const handleAgregarProducto = async () => {
     const producto = { ...nuevoProducto };
     try {
-      const response = await axios.post('http://localhost:3000/products', producto);
+      const response = await axios.post(`${API_URL}/products`, producto);
       setTodosMisProductos([...todosMisProductos, response.data]);
       setRecaudado(recaudado + parseFloat(nuevoProducto.precio) * parseFloat(nuevoProducto.cantidad));
       setNuevoProducto({ nombre: '', precio: 0, marca: '', categoria: '', cantidad: 0, talle: '', imagenes: [] });
@@ -81,9 +90,151 @@ const Admin = () => {
     }
   };
 
+
+  
+
+  
+  const handleEditarProducto = async (prod) => {
+    const updatedProduct = {
+      nombre: prod.nombre,
+      precio: prod.precio,
+      marca: prod.marca,
+      categoria: prod.categoria,
+      cantidad: prod.cantidad,
+      talle: prod.talle,
+    };
+  
+    try {
+      const response = await axios.put(`${API_URL}/products/${prod.ProductId}`, updatedProduct); // Usar prod.ProductId
+      const nuevosProductos = todosMisProductos.map(p => (p.ProductId === prod.ProductId ? response.data : p));
+      setTodosMisProductos(nuevosProductos);
+      console.log('Producto actualizado:', response.data);
+    } catch (error) {
+      console.error('Error al editar el producto:', error);
+    }
+  };
+
+
+  const EditarProducto = ({ prod, handleEditarProducto }) => {
+    const [nombre, setNombre] = useState(prod.nombre);
+    const [precio, setPrecio] = useState(prod.precio);
+    const [marca, setMarca] = useState(prod.marca);
+    const [categoria, setCategoria] = useState(prod.categoria);
+    const [cantidad, setCantidad] = useState(prod.cantidad);
+    const [talle, setTalle] = useState(prod.talle);
+  
+    const handleGuardarCambios = () => {
+      const productoActualizado = { ...prod, nombre, precio, marca, categoria, cantidad, talle };
+      handleEditarProducto(productoActualizado);
+      // Recargar la página después de guardar los cambios
+      window.location.reload();
+    };
+  
+    const handleRecargarPagina = () => {
+      // Función para recargar la página
+      window.location.reload();
+    };
+  
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000,
+        }}
+      >
+        <div className="p-4 border border-gray-300 rounded shadow-md bg-white max-w-md w-full h-full relative">
+          
+          <form>
+            <label className="block mb-2">
+              Nombre:
+              <input
+                type="text"
+                value={nombre}
+                onChange={(event) => setNombre(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+            <label className="block mb-2">
+              Precio:
+              <input
+                type="number"
+                value={precio}
+                onChange={(event) => setPrecio(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+            <label className="block mb-2">
+              Marca:
+              <input
+                type="text"
+                value={marca}
+                onChange={(event) => setMarca(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+            <label className="block mb-2">
+              Categoría:
+              <input
+                type="text"
+                value={categoria}
+                onChange={(event) => setCategoria(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+            <label className="block mb-2">
+              Cantidad:
+              <input
+                type="number"
+                value={cantidad}
+                onChange={(event) => setCantidad(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+            <label className="block mb-2">
+              Talle:
+              <input
+                type="text"
+                value={talle}
+                onChange={(event) => setTalle(event.target.value)}
+                className="block w-full p-2 mt-1 border border-gray-300 rounded"
+              />
+            </label>
+          </form>
+          <div className="mt-4 flex">
+            <button
+              onClick={handleGuardarCambios}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >
+              Guardar cambios
+            </button>
+            <button
+              onClick={handleRecargarPagina}
+              className="bg-red-500 text-white px-4 py-2 ml-2 rounded hover:bg-red-600"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+ 
+  
+
+  
+
   const handleEliminarProducto = async (ProductId, precio, cantidad) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/products/${ProductId}`);
+      const response = await axios.delete(`${API_URL}/products/${ProductId}`);
       console.log("esta es la respuesta!!!!!!!! ", response.data);
       window.location.reload();
       
@@ -135,37 +286,37 @@ const Admin = () => {
       </nav>
 
       {seccionActiva === 'productos' && (
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Todos Mis Productos</h2>
-          <ul className="bg-white shadow-md rounded-lg p-4">
-            {todosMisProductos.map(producto => {
-              // Crear la variable imgs
-              const imgs = producto.imagenes && producto.imagenes.length > 0
-                ? producto.imagenes
-                : [];
+  <section className="mb-8">
+    <h2 className="text-2xl font-semibold mb-4">Todos Mis Productos</h2>
+    <ul className="bg-white shadow-md rounded-lg p-4">
+      {todosMisProductos.map(producto => {
+        const imgs = producto.imagenes && producto.imagenes.length > 0 ? producto.imagenes : [];
 
-              return (
-                <li key={producto.id} className="border-b last:border-none py-2 flex justify-between items-center">
-                  <span>{producto.nombre} - ${producto.precio} - {producto.marca} - {producto.categoria} - Cantidad: {producto.cantidad}</span>
-                  {
-                    imgs.length > 0 && (
-                      <div>
-                        <img src={imgs[0]} alt="" width="150" className=""/>
-                      </div>
-                    )
-                  }
-                  <button
-                    onClick={() => handleEliminarProducto(producto.ProductId, producto.precio, producto.cantidad)}
-                    className="bg-red-500 text-white px-4 py-1 rounded"
-                  >
-                    Eliminar
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
+        return (
+          <li key={producto.id} className="border-b last:border-none py-2 flex justify-between items-center">
+            <span>{producto.nombre} - ${producto.precio} - {producto.marca} - {producto.categoria} - Cantidad: {producto.cantidad}</span>
+            {imgs.length > 0 && (
+              <div>
+                <img src={imgs[0]} alt="" width="150" className="" />
+              </div>
+            )}
+            <button
+              onClick={() => handleEliminarProducto(producto.id, producto.precio, producto.cantidad)}
+              className="bg-red-500 text-white px-4 py-1 rounded"
+            >
+              Eliminar
+            </button>
+            <button onClick={() => setProductoAEditar(producto)} className="bg-blue-500 text-white px-4 py-1 rounded ml-2">
+              Editar
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+    {productoAEditar && <EditarProducto prod={productoAEditar} />}
+  </section>
+)}
+
 
       {seccionActiva === 'vendidos' && (
         <section className="mb-8">

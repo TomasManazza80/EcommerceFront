@@ -11,6 +11,7 @@ import axios from "axios";
 import authContext from "../../store/store";
 import { useContext } from "react";
 import { useState, useEffect } from "react";
+const API_URL = 'https://ecommerceback-server.onrender.com';
 
 function SignUp() {
   const authCtx = useContext(authContext);
@@ -51,7 +52,7 @@ function SignUp() {
       };
 
       axios
-        .post("http://localhost:3000/users/createuser", data)
+        .post(`${API_URL}/users/createuser`, data)
         .then((response) => {
           console.log(response);
           navigate("/login");

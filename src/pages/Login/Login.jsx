@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as Yup from "yup";
 import authContext from "../../store/store";
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
 
 function Login() {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ function Login() {
       };
 
       axios
-        .post("http://localhost:3000/users/login", data)
+        .post(`${API_URL}/users/login`, data)
         .then((response) => {
           console.log(response);
           alert(`Welcome back! ${response.data.email}`);

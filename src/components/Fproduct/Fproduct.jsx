@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
+
 
 const Fproduct = () => {
   const [data, setData] = useState([]);
 
   const fetch = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/products`);
+      const res = await axios.get(`${API_URL}/products`);
       console.log(res.data);
       setData(res.data);
     } catch (error) {

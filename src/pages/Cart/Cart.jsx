@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
+
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
@@ -35,7 +38,7 @@ function Cart() {
   const createPayment = async () => {
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
-      const response = await axios.post("http://localhost:3000/create_payment", {
+      const response = await axios.post(`${API_URL}/create_payment`, {
         product: {
           title: product.title,
           unit_price: totalAmount,

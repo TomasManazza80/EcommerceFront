@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Add } from "../../store/redux/cart/CartAction";
 import Swal from "sweetalert2";
+const API_URL = 'https://ecommerceback-server.onrender.com';
 
 
 function ProductDetails() {
@@ -30,7 +31,7 @@ function ProductDetails() {
   console.log(cartSelecter);
 
   const fetch = async () => {
-    const res = await axios.get(`http://localhost:3000/products/${id}`);
+    const res = await axios.get(`${API_URL}/products/${id}`);
     console.log(res.data);
     setData(res.data);
   };

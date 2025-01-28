@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
+
+
 const Checkout = () => {
     const [product, setProduct] = useState({
         title: 'Nombre del Producto',
