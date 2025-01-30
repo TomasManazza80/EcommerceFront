@@ -1,58 +1,109 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import axios from 'axios';
+
 const API_URL = 'https://ecommerceback-server.onrender.com';
-
-
-
 const Fproduct = () => {
-  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const fetch = async () => {
+  const getProducts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/products`);
-      console.log(res.data);
-      setData(res.data);
+      const response = await axios.get(`${API_URL}/products`);
+      setProducts(response.data);
+      setLoading(false);
     } catch (error) {
-      console.error('Error al obtener los productos:', error);
+      setError(error.message);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetch();
+    getProducts();
   }, []);
 
+  const responsive = {
+    desktop: {
+      breakpoint: {
+        max: 3000,
+        min: 1024
+      },
+      items: 3,
+      partialVisibilityGutter: 40
+    },
+    mobile: {
+      breakpoint: {
+        max: 464,
+        min: 0
+      },
+      items: 1,
+      partialVisibilityGutter: 30
+    },
+    tablet: {
+      breakpoint: {
+        max: 1024,
+        min: 464
+      },
+      items: 2,
+      partialVisibilityGutter: 30
+    }
+  };
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <div className="container text-center p-20 ease-in-out m-4">
-      <h1 className="text-center text-4xl">Nuestros Productos</h1>
-      <div className="flex justify-center flex-wrap items-center p-8">
-        {data.length === 0 ? (
-          <div className="m-4 p-4">
-            <h1 className="f">Loading...</h1>
-          </div>
-        ) : (
-          data.map((item, index) => (
-            <div className="backdrop-blur-sm bg-white/30 p-4 m-4" key={index}>
-              <div>
-                <img src={item.imagenes} alt="" width="150" className="" />
-              </div>
-              <div>
-                <h1 className="text-center text-black">
-                  {item.nombre ? item.nombre.slice(0, 10) : 'Sin Nombre'}
-                </h1>
-                <h1 className="text-center text-blue-500">{item.price}</h1>
-                <h1 className="text-center font-bold text-blue-500">10% Off</h1>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-      <NavLink
-        to="/products"
-        className="p-2 bg-black text-white hover:bg-gradient-to-r from-cyan-500 to-blue-500 duration-300"
+    <div className="container">
+      <h1 className='text-4xl text-center '>Productos</h1>
+      <br />
+      <br />
+      <Carousel
+        additionalTransfrom={0}
+        arrows
+        autoPlaySpeed={3000}
+        centerMode={false}
+        className=""
+        containerClass="container-with-dots"
+        dotListClass=""
+        draggable
+        focusOnSelect={false}
+        infinite
+        itemClass=""
+        keyBoardControl
+        minimumTouchDrag={80}
+        renderButtonGroupOutside={false}
+        renderDotsOutside={false}
+        responsive={responsive}
+        showDots
+        sliderClass=""
+        slidesToSlide={1}
+        swipeable
       >
-        Ver Todos los Productos
-      </NavLink>
+        {products.map((product, index) => (
+          <div key={index} className="carousel-item text-center">
+            <div className="bg-white w-48 h-48 flex items-center justify-center mx-auto">
+              <img src={product.imagenes} alt="" className="object-contain w-full h-full" />
+            </div>
+            <div className="mt-4">
+              <h1 className="text-center text-black text-xl">
+                {product.nombre ? product.nombre.slice(0, 20) : 'Sin Nombre'}
+              </h1>
+              <h1 className="text-center text-blue-500 text-3xl">{product.price}</h1>
+              <h1 className="text-center font-bold text-blue-500 text-xl">10% Off</h1>
+              <br />
+              <br />
+            </div>
+          </div>
+        ))}
+      </Carousel>
+      
     </div>
   );
 };

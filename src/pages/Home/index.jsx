@@ -13,7 +13,21 @@ const HOME = () => {
       <div className="scroll-smooth focus:scroll-auto"> 
         <br />
         <Hero />
+        <br />
+        <br />
+        <br />
+        <br />
+    
         <Fproduct />
+        <button onClick={() => window.location.href = '/products'} className="mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ver Todos los Productos</button>
+
+        <br />
+        <br />
+        <br />
+        <br />  <br />
+        <br />
+        <br />
+        <br />
         <BuySteps />
         <Footer />
 

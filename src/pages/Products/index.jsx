@@ -15,7 +15,6 @@ const Products = () => {
 
   async function fetchProducts() {
     try {
-
       const { data } = await axios.get(`${API_URL}/products`);
       const sortedData = data.sort(compareName);
       setProduct(sortedData);
@@ -71,58 +70,55 @@ const Products = () => {
 
   return (
     <>
-    <br />
-    <br />
+      <br />
+      <br />
+      <br />
+      
       <Outlet />
-      <div className="bg-slate-300 h-full flex flex-col justify-center items-center mt-12 min-h-screen">
-        <div className="flex items-center justify-center">
-          {/* <img src={shopBanner} alt="" className="rounded-3xl p-4"/> */}
+      <div className="min-h-screen flex flex-col items-center py-12">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold">Nuestros Productos</h1>
         </div>
-        <div className="h-20 flex items-center text-3xl justify-center flex-col">
-          <h1>Productos</h1>
-        </div>
-        
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center mb-6">
           <input
             type="search"
-            className="outline-none w-80 p-2 m-2"
-            placeholder="Search Products"
+            className="outline-none w-80 p-3 m-3 border border-gray-300 rounded shadow-sm"
+            placeholder="Buscar productos..."
             onChange={(e) => setSearch(e.target.value)}
             value={search}
           />
-          <div>
+          <div className="flex flex-col md:flex-row space-x-3">
             <input
               type="number"
-              placeholder="MIN"
-              className="outline-none w-36 p-2 m-2"
+              placeholder="Precio Mínimo"
+              className="outline-none w-36 p-3 m-3 border border-gray-300 rounded shadow-sm"
               onChange={(e) => setMin(e.target.value)}
               value={min}
             />
             <input
               type="number"
-              placeholder="MAX"
-              className="outline-none w-40 p-2 m-2"
+              placeholder="Precio Máximo"
+              className="outline-none w-36 p-3 m-3 border border-gray-300 rounded shadow-sm"
               onChange={(e) => setMax(e.target.value)}
               value={max}
             />
           </div>
         </div>
-        
-        <div className="flex justify-center space-x-4 mt-4">
-          <button onClick={() => setCategory("")} className="bg-blue-500 text-white py-2 px-4 rounded">Todos</button>
-          <button onClick={() => setCategory("remeras")} className="bg-blue-500 text-white py-2 px-4 rounded">Remeras</button>
-          <button onClick={() => setCategory("pantalones")} className="bg-blue-500 text-white py-2 px-4 rounded">Pantalones</button>
-          <button onClick={() => setCategory("abrigos")} className="bg-blue-500 text-white py-2 px-4 rounded">Abrigos</button>
-          <button onClick={() => setCategory("calzados")} className="bg-blue-500 text-white py-2 px-4 rounded">Calzados</button>
-          <button onClick={() => setCategory("ropa interior")} className="bg-blue-500 text-white py-2 px-4 rounded">Ropa Interior</button>
-          <button onClick={() => setCategory("camisas")} className="bg-blue-500 text-white py-2 px-4 rounded">Camisas</button>
-          <button onClick={() => setCategory("accesorios")} className="bg-blue-500 text-white py-2 px-4 rounded">Accesorios</button>
+        <div className="flex flex-wrap justify-center space-x-3 mb-6">
+          {['', 'remeras', 'pantalones', 'abrigos', 'calzados', 'ropa interior', 'camisas', 'accesorios'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={`py-2 px-6 rounded ${category === cat ? "bg-indigo-700" : "bg-indigo-500"} text-white transition duration-200 hover:bg-indigo-600`}
+            >
+              {cat === '' ? 'Todos' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+          ))}
         </div>
-        
-        <div className="flex flex-wrap justify-center mt-4">
+        <div className="flex flex-wrap justify-center">
           {FilterArray.length === 0 ? (
             <div className="m-4 p-4">
-              <h1 className="text-black">Loading...</h1>
+              <h1>Cargando...</h1>
             </div>
           ) : (
             FilterArray.map((item, index) => (
@@ -131,17 +127,20 @@ const Products = () => {
                 id={item.ProductId}
                 name={item.nombre}
                 price={item.precio}
-                image={item.imagenes[0]} // Assuming `imagenes` is an array and we're using the first image
-              />
+                image={item.imagenes[0]}
+                className="w-72 h-96 bg-white flex flex-col items-center justify-between p-6 m-4 rounded-lg shadow-md"
+              >
+                <div className="h-40 w-full flex items-center justify-center">
+                  <img src={item.imagenes[0]} alt={item.nombre} className="object-contain h-32 w-32" /> 
+                </div>
+                <div className="mt-4 text-center min-h-[5rem]">
+                  <h2 className="text-xl font-bold">{item.nombre}</h2>
+                  <p>${item.precio}</p>
+                </div>
+              </ProductCart>
             ))
           )}
         </div>
-        {/* <button
-          className="bg-slate-500 text-white py-2 px-5 rounded-3xl m-5 w-40 backdrop-blur-xl hover:bg-slate-300 transition ease-in-out delay-150"
-          onClick={() => setLoadMore(!LoadMore)}
-        >
-          {LoadMore ? "Show Less" : "Load More"}
-        </button> */}
       </div>
     </>
   );

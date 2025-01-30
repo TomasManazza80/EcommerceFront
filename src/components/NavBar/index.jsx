@@ -130,19 +130,19 @@ function index() {
                   onClick={toggleHandler}
                 />
                 <NavLink to="/" className="text-black  p-3 m-2 font-bold">
-                  Home
+                  Inicio
                 </NavLink>
                 <NavLink
                   to="/products"
                   className="text-black  p-3 m-2 font-bold"
                 >
-                  Products
+                  Productos
                 </NavLink>
                 <NavLink to="/about" className="text-black   p-3 m-2 font-bold">
-                  About
+                  Información
                 </NavLink>
                 <NavLink to="/contact" className="text-black   p-3 m-2 font-bold">
-                  Contact
+                  Contacto
                 </NavLink>
                 <NavLink to="/cart" className="p-2 m-2 ">
                   <FontAwesomeIcon icon={faCartShopping} />

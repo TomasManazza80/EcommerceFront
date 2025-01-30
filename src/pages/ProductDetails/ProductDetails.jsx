@@ -10,7 +10,6 @@ import { Add } from "../../store/redux/cart/CartAction";
 import Swal from "sweetalert2";
 const API_URL = 'https://ecommerceback-server.onrender.com';
 
-
 function ProductDetails() {
   const [data, setData] = useState({});
   const [quantity, setQuantity] = useState(0);
@@ -52,15 +51,9 @@ function ProductDetails() {
   const AddToCartHandeler = () => {
     if (quantity === 0) {
       console.log("producto agregado al carrito");
-      
       return;
     } else {
       if (cartSelecter.cart.find((item) => item.id === data.ProductId)) {
-        
-
-
-
-        
         return;
       } else {
         dispatch(Add(item));
@@ -81,7 +74,7 @@ function ProductDetails() {
 
   return (
     <div className="w-full mt-12 bg-slate-100 p-4">
-      <div className="flex justify-between m-6 p-8 rounded-2xl">
+      <div className="flex flex-col md:flex-row justify-between m-6 p-8 rounded-2xl">
         <div className="p-4 rounded-2xl backdrop-blur-sm bg-white/30">
           {data.imagenes && data.imagenes[0] && (
             <img
@@ -93,7 +86,7 @@ function ProductDetails() {
             />
           )}
         </div>
-        <div className="p-20 w-3/4 justify-center text-center">
+        <div className="p-4 md:p-20 w-full md:w-3/4 justify-center text-center">
           <h1 className="font-extrabold text-3xl">{data.nombre?.slice(0, 20)}</h1>
           <h2 className="text-2xl font-semibold">{data.marca?.slice(0, 20)}</h2>
           <h3 className="text-xl font-medium">Talle: {data.talle?.slice(0, 20)}</h3>
@@ -124,7 +117,7 @@ function ProductDetails() {
               className="bg-slate-500 ease-in rounded-2xl p-4 hover:bg-slate-300 hover:text-black mt-8"
               onClick={AddToCartHandeler}
             >
-              agregar al carrito
+              Agregar al carrito
             </button>
           </div>
         </div>
