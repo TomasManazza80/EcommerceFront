@@ -286,3 +286,19 @@ body {
     height: auto;
   }
 }
+
+
+  /* Para pantallas pequeñas (celulares) */
+@media (max-width: 768px) {
+  .flex {
+    flex-direction: column;
+  }
+  
+  .flex-nowrap {
+    flex-wrap: nowrap;
+  }
+
+  .space-x-4 > :not(:first-child) {
+    margin-left: 1rem;
+  }
+}

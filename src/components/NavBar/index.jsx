@@ -14,18 +14,18 @@ import axios from "axios";
 
 const API_URL = 'https://ecommerceback-server.onrender.com';
 
-
-function index() {
+function Index() {
   const [toggle, setToggle] = useState(false);
   const authCtx = useContext(authContext);
   const [Role, setRole] = useState(null);
- 
+
   const cartLenght = useSelector((state) => state.cart.length);
 
   const signOutHandler = () => {
     localStorage.removeItem("token");
     authCtx.setToken(null);
     alert("Sign-out successful.");
+    closeNavbar();
   };
 
   async function isAdmin(email) {
@@ -49,17 +49,18 @@ function index() {
     return false;
   }
   
+  const actualizarPagina = () => {
+    window.location.reload();
+  };
 
   const toggleHandler = () => {
     setToggle(!toggle);
   };
 
-  { authCtx.role === true ? (
-    <NavLink to="/admin" className="text-black  p-3 m-2 font-bold">
-      Admin DashBoard
-    </NavLink>
-  ) : null}
-  
+  const closeNavbar = () => {
+    setToggle(false);
+  };
+
   const getToken = async () => {
     const token = localStorage.getItem("token");
     authCtx.setToken(token);
@@ -71,10 +72,11 @@ function index() {
     setRole(contenido.role);
     return contenido.role;
   };
+
   useEffect(() => {
     getToken();
   }, []);
-  
+
   return (
     <>
       <div className=" ">
@@ -95,12 +97,11 @@ function index() {
             <NavLink to="/contact" className="text-black   p-3 m-2 font-bold">
               Contacto
             </NavLink>
-            { Role == true ? (
+            { Role === true ? (
               <NavLink to="/admin" className="text-black p-3 m-2 font-bold">
                 Panel de Administración
               </NavLink>
             ) : null}
-
           </div>
           <div className="text-black max-lg:hidden">
             <NavLink to="/cart" className="p-2 m-2 ">
@@ -129,22 +130,23 @@ function index() {
                   className="text-black cursor-pointer lg:hidden"
                   onClick={toggleHandler}
                 />
-                <NavLink to="/" className="text-black  p-3 m-2 font-bold">
+                <NavLink to="/" className="text-black  p-3 m-2 font-bold" onClick={closeNavbar}>
                   Inicio
                 </NavLink>
                 <NavLink
                   to="/products"
                   className="text-black  p-3 m-2 font-bold"
+                  onClick={closeNavbar}
                 >
                   Productos
                 </NavLink>
-                <NavLink to="/about" className="text-black   p-3 m-2 font-bold">
+                <NavLink to="/about" className="text-black   p-3 m-2 font-bold" onClick={closeNavbar}>
                   Información
                 </NavLink>
-                <NavLink to="/contact" className="text-black   p-3 m-2 font-bold">
+                <NavLink to="/contact" className="text-black   p-3 m-2 font-bold" onClick={closeNavbar}>
                   Contacto
                 </NavLink>
-                <NavLink to="/cart" className="p-2 m-2 ">
+                <NavLink to="/cart" className="p-2 m-2 " onClick={closeNavbar}>
                   <FontAwesomeIcon icon={faCartShopping} />
                   <span className="p-1 rounded-full">{cartLenght}</span>
                 </NavLink>
@@ -152,6 +154,7 @@ function index() {
                   <button
                     onClick={signOutHandler}
                     className="p-2 m-2 bg-black text-white"
+                   
                   >
                     Logout
                   </button>
@@ -159,6 +162,7 @@ function index() {
                   <NavLink
                     to="/login"
                     className="p-2 m-2 bg-black text-white text-center"
+                    onClick={closeNavbar}
                   >
                     Login
                   </NavLink>
@@ -181,4 +185,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;

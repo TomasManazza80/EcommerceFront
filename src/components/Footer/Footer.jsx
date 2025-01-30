@@ -1,57 +1,46 @@
 import React from "react";
 import logo from "../../images/logoBlanco.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebook,
-  faTelegram,
-  faTwitter,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
 import gif from "../../images/img9.jpeg";
 
 function Footer() {
   return (
-    <>
-      <div className="mt-10 h-50" style={{ backgroundImage: `url(${gif})` }}>
-        <div className="container m-auto flex justify-between text-white items-center">
-          <div className="p-4 basis-80">
-            <img src={logo} alt="" className="duration-300 ease-in-out cursor-pointer" />
-            <div className="p-4 flex space-x-4">
-              <FontAwesomeIcon
-                icon={faFacebook}
-                className="text-2xl text-white hover:text-gray-200 cursor-pointer"
-              />
-              <FontAwesomeIcon
-                icon={faTelegram}
-                className="text-2xl text-white hover:text-gray-200 cursor-pointer"
-              />
-              <FontAwesomeIcon
-                icon={faTwitter}
-                className="text-2xl text-white hover:text-gray-200 cursor-pointer"
-              />
-              <FontAwesomeIcon
-                icon={faInstagram}
-                className="text-2xl text-white hover:text-gray-200 cursor-pointer"
-              />
-            </div>
-          </div>
-          <div className="flex-col p-2">
-            <h1 className="font-extralight text-white p-2">¡Suscribete ahora!</h1>
-            <input
-              className="border-2 border-gray-400 rounded-lg p-1 m-1 outline-none text-black font-semibold"
-              placeholder="Enter Email!"
-            />
-            <button className="bg-blue-500 rounded-lg text-white p-2 m-1 hover:bg-red-500 delay-150 hover:rotate-12">
-              Subscribe
-            </button>
-            <div>
-              <p>Subscribete y recibe nuestras las últimas</p>
-              <p>noticias y promociones</p>
-            </div>
-          </div>
+    <footer
+      style={{
+        backgroundImage: `url(${gif})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+      className="py-8 text-white"
+    >
+      <div className="container mx-auto flex flex-col items-center px-4 sm:px-6 md:px-8 lg:px-12 space-y-6">
+        <div className="flex justify-center">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-32 h-32"
+            style={{ margin: "0 auto",height: "auto",  width: "300px" }}
+          />
         </div>
+        <div className="flex justify-center space-x-4 md:space-x-6 text-lg sm:text-xl md:text-2xl flex-wrap">
+          <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
+            <i className="fab fa-facebook"></i>
+          </a>
+          <a href="https://telegram.org" aria-label="Telegram" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
+            <i className="fab fa-telegram"></i>
+          </a>
+          <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
+            <i className="fab fa-twitter"></i>
+          </a>
+          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
+            <i className="fab fa-instagram"></i>
+          </a>
+        </div>
+        <p className="text-sm sm:text-base md:text-lg lg:text-x text-center">
+          © {new Date().getFullYear()} Tomas Manazza. All rights reserved.
+        </p>
       </div>
-    </>
+    </footer>
   );
 }
 

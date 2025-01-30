@@ -19,7 +19,14 @@ const HOME = () => {
         <br />
     
         <Fproduct />
-        <button onClick={() => window.location.href = '/products'} className="mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ver Todos los Productos</button>
+        <br />
+        <br />
+        <button 
+  onClick={() => window.location.href = '/products'}
+  className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+>
+  Ver Todos los Productos
+</button>
 
         <br />
         <br />
@@ -29,6 +36,9 @@ const HOME = () => {
         <br />
         <br />
         <BuySteps />
+        <br />
+<br />
+<br />
         <Footer />
 
       </div>
