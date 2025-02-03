@@ -5,19 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-const API_URL = 'https://ecommerceback-server.onrender.com';
 
-
+const API_URL = 'http://localhost:3000';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
-  const [product, setProduct] = useState({
-    title: "Nombre del Producto",
-    unit_price: 100,
-    quantity: 1,
-  });
 
   const [error, setError] = useState("");
   const [isPaymentReady, setIsPaymentReady] = useState(false);
@@ -27,24 +20,32 @@ function Cart() {
     setUpdatedCart(cart);
   }, [cart]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const createPayment = async () => {
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
-      const response = await axios.post(`${API_URL}/create_payment`, {
+
+      await Promise.all(
+        updatedCart.map(async (item) => {
+          await axios.post(`${API_URL}/boughtProduct/boughtProduct`, {
+            nombre: item.title,
+            precio: item.price,
+            cantidad: item.quantity,
+            marca: item.brand || 'Marca Desconocida',
+            categoria: item.category || 'Categoría Desconocida',
+            talle: item.size || 'Talle Único'
+          });
+        })
+      );
+
+      // Almacenar los productos del carrito en la base de datos
+      const response = await axios.post(`http://localhost:3000/payment/create_payment`, {
         product: {
-          title: product.title,
+          title: "Productos en el carrito",
           unit_price: totalAmount,
-          quantity: product.quantity,
+          quantity: 1,
         },
       });
+
       setError(""); // Limpiar el error si la solicitud es exitosa
       window.location.href = response.data.payment_url; // Redirigir al enlace de pago
     } catch (error) {
@@ -134,7 +135,6 @@ function Cart() {
                           })
                         }
                       />
-                    
                       <FontAwesomeIcon
                         icon={faSquarePlus}
                         className="cursor-pointer text-2xl"

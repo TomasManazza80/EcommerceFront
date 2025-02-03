@@ -21,12 +21,12 @@ const Checkout = () => {
     };
 
     const createPayment = async () => {
-        try {
-            const response = await axios.post('http://localhost:3000/create_payment', {
+        try {lo
+            const response = await axios.post('https://ecommerceback-server.onrender.com/create_payment', {
                 product: {
-                    title: product.title,
-                    unit_price: product.unit_price,
-                    quantity: product.quantity
+                    title: product.nombre,
+                    unit_price: product.precio,
+                    quantity: product.cantidad
                 }
             });
             setError(''); // Limpiar el error si la solicitud es exitosa
