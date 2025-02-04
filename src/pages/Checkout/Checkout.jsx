@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://ecommerceback-server.onrender.com';
 
 
 
@@ -22,7 +23,7 @@ const Checkout = () => {
 
     const createPayment = async () => {
         try {lo
-            const response = await axios.post('https://ecommerceback-server.onrender.com/create_payment', {
+            const response = await axios.post(`${API_URL}/create_payment`, {
                 product: {
                     title: product.nombre,
                     unit_price: product.precio,

@@ -6,7 +6,8 @@ import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://ecommerceback-server.onrender.com';
+
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
@@ -38,7 +39,7 @@ function Cart() {
       );
 
       // Almacenar los productos del carrito en la base de datos
-      const response = await axios.post(`http://localhost:3000/payment/create_payment`, {
+      const response = await axios.post(`${API_URL}/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,

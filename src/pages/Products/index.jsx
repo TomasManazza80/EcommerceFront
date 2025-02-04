@@ -11,11 +11,12 @@ const Products = () => {
   const [max, setMax] = useState("");
   const [category, setCategory] = useState("");
   const [showCategories, setShowCategories] = useState(false);
-  const API_URL = 'http://localhost:3000';
+  const API_URL = 'https://ecommerceback-server.onrender.com';
+
 
   async function fetchProducts() {
     try {
-      const { data } = await axios.get(`http://localhost:3000/products/products`);
+      const { data } = await axios.get(`${API_URL}/products/products`);
       const sortedData = data.sort(compareName);
       setProduct(sortedData);
       setFilterArray(sortedData);

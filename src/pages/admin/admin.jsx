@@ -51,7 +51,7 @@ const Admin = () => {
 
     const obtenerProductosVendidos = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/boughtProduct/AllboughtProducts`);
+        const response = await axios.get(`${API_URL}/boughtProduct/AllboughtProducts`);
         setProductosVendidos(response.data);
         console.log("!!estos son los productos vendidos: ", response.data);
       } catch (error) {
@@ -133,7 +133,7 @@ const handleEliminarProducto = async (ProductId, precio, cantidad) => {
 const descontarStock = async (id, cantidad) => {
   console.log("ESTE ES EL ID DE MI PRODUCTO $$$$$$$$$$$$$$ ", id);
   try {
-    const response = await axios.put(`http://localhost:3000/products/products/update-quantity/${id}`, {
+    const response = await axios.put(`${API_URL}/products/products/update-quantity/${id}`, {
       quantityToDiscount: cantidad,
     });
     console.log(response.data);
