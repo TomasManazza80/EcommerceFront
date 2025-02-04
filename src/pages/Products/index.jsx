@@ -16,7 +16,7 @@ const Products = () => {
 
   async function fetchProducts() {
     try {
-      const { data } = await axios.get(`${API_URL}/products/products`);
+      const { data } = await axios.get(`${API_URL}/products`);
       const sortedData = data.sort(compareName);
       setProduct(sortedData);
       setFilterArray(sortedData);

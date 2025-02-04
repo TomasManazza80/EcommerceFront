@@ -6,7 +6,7 @@ import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'http://localhost:3000';
 
 
 function Cart() {
@@ -27,19 +27,22 @@ function Cart() {
 
       await Promise.all(
         updatedCart.map(async (item) => {
-          await axios.post(`${API_URL}/boughtProduct/boughtProduct`, {
+          console.log("etse es mi item @@@@@@@@@@@@@@@@@@",item.id);
+          await axios.post(`http://localhost:3000/boughtProduct/boughtProduct`, {
             nombre: item.title,
             precio: item.price,
             cantidad: item.quantity,
-            marca: item.brand || 'Marca Desconocida',
+            marca: item.id || 'Marca Desconocida',
             categoria: item.category || 'Categoría Desconocida',
-            talle: item.size || 'Talle Único'
+            talle: item.size || 'Talle Único',
+
+
           });
         })
       );
 
       // Almacenar los productos del carrito en la base de datos
-      const response = await axios.post(`${API_URL}/payment/create_payment`, {
+      const response = await axios.post(`http://localhost:3000/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,
@@ -77,6 +80,9 @@ function Cart() {
       const newQuantity = quantity - 1;
       const item = { id, quantity: newQuantity, price };
       dispatch(Update(item));
+
+      
+
     } else {
       dispatch(Remove(id));
     }

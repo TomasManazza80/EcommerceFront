@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'http://localhost:3000';
+
 
 const Admin = () => {
   // Estados iniciales y configuraciones
@@ -42,7 +43,7 @@ const Admin = () => {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const response = await axios.get(`${API_URL}/products/products`);
+        const response = await axios.get(`https://ecommerceback-haed.onrender.com/products/products`);
         setTodosMisProductos(response.data);
       } catch (error) {
         console.error('Error al obtener los productos:', error);
@@ -51,7 +52,8 @@ const Admin = () => {
 
     const obtenerProductosVendidos = async () => {
       try {
-        const response = await axios.get(`${API_URL}/boughtProduct/AllboughtProducts`);
+        const response = await axios.get(`https://ecommerceback-haed.onrender.com/boughtProduct/AllboughtProducts`);
+        
         setProductosVendidos(response.data);
         console.log("!!estos son los productos vendidos: ", response.data);
       } catch (error) {
@@ -99,7 +101,7 @@ const Admin = () => {
 
  const handleAgregarProducto = async () => {
   try {
-    const response = await axios.post(`${API_URL}/products/products`, nuevoProducto);
+    const response = await axios.post(`http://localhost:3000/products/products`, nuevoProducto);
     setTodosMisProductos([...todosMisProductos, response.data]);
     setRecaudado((prevRecaudado) => prevRecaudado + nuevoProducto.precio * nuevoProducto.cantidad);
     setNuevoProducto({ nombre: '', precio: 0, marca: '', categoria: '', cantidad: 0, talle: '', imagenes: [] });
@@ -121,7 +123,7 @@ const handleEditarProducto = async (productoActualizado) => {
 const handleEliminarProducto = async (ProductId, precio, cantidad) => {
    
   try {
-    const response = await axios.delete(`${API_URL}/products/${ProductId}`);
+    const response = await axios.delete(`http://localhost:3000/products/products/${ProductId}`);
     setTodosMisProductos(todosMisProductos.filter((producto) => producto.id !== ProductId));
     setRecaudado((prevRecaudado) => prevRecaudado - precio * cantidad);
     recargarPagina();
@@ -131,9 +133,11 @@ const handleEliminarProducto = async (ProductId, precio, cantidad) => {
 };
 
 const descontarStock = async (id, cantidad) => {
-  console.log("ESTE ES EL ID DE MI PRODUCTO $$$$$$$$$$$$$$ ", id);
   try {
-    const response = await axios.put(`${API_URL}/products/products/update-quantity/${id}`, {
+    const id_ok = id;
+    console.log("ESTE ES EL ID DE MI PRODUCTO $$$$$$$$$$$$$$ ", id_ok);
+
+    const response = await axios.put(`http://localhost:3000/products/products/update-quantity/${id_ok}`, {
       quantityToDiscount: cantidad,
     });
     console.log(response.data);
@@ -231,7 +235,7 @@ return (
     <h1 className="text-3xl font-bold mb-8">Dashboard de Administrador</h1>
 
     <nav className="mb-8">
-      {['productos', 'cargar', 'recaudado', 'ventas'].map((section, idx) => (
+      {['productos', 'cargar', 'ventas'].map((section, idx) => (
         <button
           key={idx}
           className={`mr-4 px-4 py-2 rounded ${seccionActiva === section ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
@@ -300,7 +304,7 @@ return (
                 )}
                 <div className="flex space-x-2">
                 <button
-                    onClick={() => descontarStock(producto.ProductId,  producto.cantidad)}   
+                    onClick={() => descontarStock(producto.marca,  producto.cantidad)}   
                     className="bg-green-500 text-white px-4 py-1 rounded"
                   >
                     Confirmar Venta
@@ -410,14 +414,8 @@ return (
       </section>
     )}
 
-    {seccionActiva === 'recaudado' && (
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Total Recaudado</h2>
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <p className="text-xl">${recaudado}</p>
-        </div>
-      </section>
-    )}
+   
+    
   </div>
 );
 };
