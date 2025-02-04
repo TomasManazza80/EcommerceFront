@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 
 
