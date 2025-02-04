@@ -11,7 +11,7 @@ const Products = () => {
   const [max, setMax] = useState("");
   const [category, setCategory] = useState("");
   const [showCategories, setShowCategories] = useState(false);
-  const API_URL = 'https://ecommerceback-server.onrender.com';
+  const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 
   async function fetchProducts() {
