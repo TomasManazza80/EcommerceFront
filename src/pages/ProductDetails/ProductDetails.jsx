@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Add } from "../../store/redux/cart/CartAction";
 import Swal from "sweetalert2";
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 function ProductDetails() {
   const [data, setData] = useState({});
