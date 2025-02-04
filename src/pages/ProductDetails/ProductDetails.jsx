@@ -30,7 +30,7 @@ function ProductDetails() {
   console.log(cartSelecter);
 
   const fetch = async () => {
-    const res = await axios.get(`${API_URL}/products/${id}`);
+    const res = await axios.get(`${API_URL}/products/products/${id}`);
     console.log(res.data);
     setData(res.data);
   };
