@@ -30,7 +30,7 @@ function Login() {
       };
 
       axios
-        .post(`${API_URL}/users/login`, data)
+        .post(`https://ecommerceback-haed.onrender.com/users/login`, data)
         .then((response) => {
           console.log(response);
           alert(`Welcome back! ${response.data.email}`);
