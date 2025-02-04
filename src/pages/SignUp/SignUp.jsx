@@ -11,7 +11,7 @@ import axios from "axios";
 import authContext from "../../store/store";
 import { useContext } from "react";
 import { useState, useEffect } from "react";
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 function SignUp() {
   const authCtx = useContext(authContext);
