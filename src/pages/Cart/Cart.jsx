@@ -6,7 +6,7 @@ import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 
 function Cart() {
@@ -28,7 +28,7 @@ function Cart() {
       await Promise.all(
         updatedCart.map(async (item) => {
           console.log("etse es mi item @@@@@@@@@@@@@@@@@@",item.id);
-          await axios.post(`http://localhost:3000/boughtProduct/boughtProduct`, {
+          await axios.post(`https://ecommerceback-haed.onrender.com/boughtProduct/boughtProduct`, {
             nombre: item.title,
             precio: item.price,
             cantidad: item.quantity,
@@ -42,7 +42,7 @@ function Cart() {
       );
 
       // Almacenar los productos del carrito en la base de datos
-      const response = await axios.post(`http://localhost:3000/payment/create_payment`, {
+      const response = await axios.post(`https://ecommerceback-haed.onrender.com/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,
