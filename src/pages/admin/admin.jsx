@@ -132,7 +132,7 @@ const handleEliminarProducto = async (ProductId, precio, cantidad) => {
   }
 };
 
-const descontarStock = async (id, cantidad) => {
+const descontarStock = async (id, cantidad, id_delete) => {
   try {
     const id_ok = id;
     console.log("ESTE ES EL ID DE MI PRODUCTO $$$$$$$$$$$$$$ ", id_ok);
@@ -141,7 +141,7 @@ const descontarStock = async (id, cantidad) => {
       quantityToDiscount: cantidad,
     });
     console.log(response.data);
-    handleEliminarProductoVendido(id);
+    handleEliminarProductoVendido(id_delete);
   } catch (error) {
     console.error('Error al descontar stock:', error);
   }
@@ -304,7 +304,7 @@ return (
                 )}
                 <div className="flex space-x-2">
                 <button
-                    onClick={() => descontarStock(producto.marca,  producto.cantidad)}   
+                    onClick={() => descontarStock(producto.marca,  producto.cantidad, producto.ProductId)}   
                     className="bg-green-500 text-white px-4 py-1 rounded"
                   >
                     Confirmar Venta
