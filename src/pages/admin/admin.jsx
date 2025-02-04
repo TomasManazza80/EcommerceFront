@@ -153,6 +153,7 @@ const handleEliminarProductoVendido = async (id) => {
   try {
     await axios.delete(`https://ecommerceback-haed.onrender.com/boughtProduct/${id}`);
     setProductosVendidos((prevProductosVendidos) => prevProductosVendidos.filter((producto) => producto.id !== id));
+    recargarPagina();
   } catch (error) {
     console.error('Error al eliminar producto:', error);
   }
