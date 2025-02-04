@@ -16,7 +16,7 @@ const Products = () => {
 
   async function fetchProducts() {
     try {
-      const { data } = await axios.get(`https://ecommerceback-haed.onrender.com/products`);
+      const { data } = await axios.get(`https://ecommerceback-haed.onrender.com/products/products`);
       const sortedData = data.sort(compareName);
       setProduct(sortedData);
       setFilterArray(sortedData);
