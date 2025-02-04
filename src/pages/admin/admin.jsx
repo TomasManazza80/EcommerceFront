@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 
 const Admin = () => {
@@ -101,7 +101,7 @@ const Admin = () => {
 
  const handleAgregarProducto = async () => {
   try {
-    const response = await axios.post(`http://localhost:3000/products/products`, nuevoProducto);
+    const response = await axios.post(`https://ecommerceback-haed.onrender.com/products/products`, nuevoProducto);
     setTodosMisProductos([...todosMisProductos, response.data]);
     setRecaudado((prevRecaudado) => prevRecaudado + nuevoProducto.precio * nuevoProducto.cantidad);
     setNuevoProducto({ nombre: '', precio: 0, marca: '', categoria: '', cantidad: 0, talle: '', imagenes: [] });
@@ -112,7 +112,7 @@ const Admin = () => {
 
 const handleEditarProducto = async (productoActualizado) => {
   try {
-    const response = await axios.put(`${API_URL}/products/${productoActualizado.ProductId}`, productoActualizado);
+    const response = await axios.put(`https://ecommerceback-haed.onrender.com/products/${productoActualizado.ProductId}`, productoActualizado);
     setTodosMisProductos(todosMisProductos.map((producto) => (producto.id === productoActualizado.id ? response.data : producto)));
     setShowForm(false);
   } catch (error) {
@@ -123,7 +123,7 @@ const handleEditarProducto = async (productoActualizado) => {
 const handleEliminarProducto = async (ProductId, precio, cantidad) => {
    
   try {
-    const response = await axios.delete(`http://localhost:3000/products/products/${ProductId}`);
+    const response = await axios.delete(`https://ecommerceback-haed.onrender.com/products/products/${ProductId}`);
     setTodosMisProductos(todosMisProductos.filter((producto) => producto.id !== ProductId));
     setRecaudado((prevRecaudado) => prevRecaudado - precio * cantidad);
     recargarPagina();
@@ -137,7 +137,7 @@ const descontarStock = async (id, cantidad) => {
     const id_ok = id;
     console.log("ESTE ES EL ID DE MI PRODUCTO $$$$$$$$$$$$$$ ", id_ok);
 
-    const response = await axios.put(`http://localhost:3000/products/products/update-quantity/${id_ok}`, {
+    const response = await axios.put(`https://ecommerceback-haed.onrender.com/products/products/update-quantity/${id_ok}`, {
       quantityToDiscount: cantidad,
     });
     console.log(response.data);
@@ -151,7 +151,7 @@ const descontarStock = async (id, cantidad) => {
 
 const handleEliminarProductoVendido = async (id) => {
   try {
-    await axios.delete(`${API_URL}/boughtProduct/${id}`);
+    await axios.delete(`https://ecommerceback-haed.onrender.com/boughtProduct/${id}`);
     setProductosVendidos((prevProductosVendidos) => prevProductosVendidos.filter((producto) => producto.id !== id));
   } catch (error) {
     console.error('Error al eliminar producto:', error);
