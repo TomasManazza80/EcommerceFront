@@ -52,7 +52,7 @@ function SignUp() {
       };
 
       axios
-        .post(`${API_URL}/users/createuser`, data)
+        .post(`https://ecommerceback-haed.onrender.com/createuser`, data)
         .then((response) => {
           console.log(response);
           navigate("/login");
