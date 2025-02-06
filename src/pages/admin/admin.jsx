@@ -112,7 +112,7 @@ const Admin = () => {
 
 const handleEditarProducto = async (productoActualizado) => {
   try {
-    const response = await axios.put(`https://ecommerceback-haed.onrender.com/products/${productoActualizado.ProductId}`, productoActualizado);
+    const response = await axios.put(`https://ecommerceback-haed.onrender.com/products/products/${productoActualizado.ProductId}`, productoActualizado);
     setTodosMisProductos(todosMisProductos.map((producto) => (producto.id === productoActualizado.id ? response.data : producto)));
     setShowForm(false);
   } catch (error) {
