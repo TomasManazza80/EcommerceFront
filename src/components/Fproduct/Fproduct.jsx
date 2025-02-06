@@ -95,8 +95,8 @@ const Fproduct = () => {
               <h1 className="text-center text-black text-xl">
                 {product.nombre ? product.nombre.slice(0, 20) : 'Sin Nombre'}
               </h1>
-              <h1 className="text-center text-blue-500 text-3xl">{product.price}</h1>
-              <h1 className="text-center font-bold text-blue-500 text-xl">10% Off</h1>
+              <h1 className="text-center text-blue-500 text-3xl">${product.precio}</h1>
+              
               <br />
               <br />
             </div>
