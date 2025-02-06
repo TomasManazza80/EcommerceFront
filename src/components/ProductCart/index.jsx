@@ -28,7 +28,7 @@ const ProductCart = ({ image, name, price, id }) => {
 
           <div className="m-5">
             <h5 className="font-bold flex-wrap text-slate-600 ">{name?.slice(0,10)}</h5>
-            <p className="product-price text-blue-700 font-bold">{`${price}$`}</p>
+            <p className="product-price text-blue-700 font-bold">${`${price}$`}</p>
           </div>
         </div>
       </div>
