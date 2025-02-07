@@ -6,7 +6,7 @@ import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import emailjs from '@emailjs/browser';
 
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
