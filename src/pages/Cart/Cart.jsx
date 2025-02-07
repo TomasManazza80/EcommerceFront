@@ -186,7 +186,7 @@ const enviarEmail = () => {
           </div>
           <div className="text-center p-4">
             <h1 className="font-bold text-3xl">Total a pagar</h1>
-            <h1 className="p-2">{`${TotalPrice}$`}</h1>
+            <h1 className="p-2">{`$${TotalPrice}`}</h1>
             {cart.length > 0 && (
               <button
                 onClick={handleCheckout}
@@ -198,18 +198,32 @@ const enviarEmail = () => {
           </div>
         </div>
       </div>
-      <div className="m-20 text-center">
-        {cart.length !== 0 && (
-          <NavLink
-            to="/products"
-            className="p-2 bg-black text-white hover:bg-gradient-to-r from-cyan-500 to-blue-500 duration-300"
-          >
-            Agregar productos
-          </NavLink>
-        )}
-      </div>
+      {showForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+            <form onSubmit={handleFormSubmit} className="flex flex-col space-y-4">
+              <h1>INGRESAR DATOS PARA REALIZAR PAGO</h1>
+              <br />
+              <label className="flex flex-col ">
+                Celular:
+                <input type="tel"  name="user_cellphone" value={cellphone} onChange={(e) => setCellphone(e.target.value)} required className="p-2 border rounded" />
+              </label>
+              <label className="flex flex-col">
+                Dirección y Ciudad:
+                <input type="text" name="user_address" value={address} onChange={(e) => setAddress(e.target.value)} required className="p-2 border rounded" />
+              </label>
+              <label className="flex flex-col">
+                Mensaje:
+                <textarea name="message" value={message} onChange={(e) => setMessage(e.target.value)} required className="p-2 border rounded"></textarea>
+              </label>
+              <button type="submit" className="p-2 bg-black text-white hover:bg-gradient-to-r from-cyan-500 to-blue-500 duration-300 rounded">Enviar Email y Pagar</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Cart;
+
