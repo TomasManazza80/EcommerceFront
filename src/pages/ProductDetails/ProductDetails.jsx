@@ -160,7 +160,7 @@ function ProductDetails() {
                 </div>
                 {hoveredProductId === product.ProductId && (
                   <button
-                    className="absolute inset-0 m-auto bg-black-500 text-white py-1 px-2 rounded" // Tamaño reducido
+                    className="absolute inset-0 m-auto bg-black text-white py-1 px-2 rounded" // Tamaño reducido
                     style={{
                       top: "50%",
                       left: "50%",
