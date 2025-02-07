@@ -26,7 +26,6 @@ function Cart() {
   }, [cart]);
 
   const createPayment = async () => {
-    enviarEmail();
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
 
@@ -54,6 +53,7 @@ function Cart() {
       });
 
       setError("");
+    enviarEmail();
       window.location.href = response.data.payment_url;
     } catch (error) {
       console.error("Error al crear el pago:", error);
