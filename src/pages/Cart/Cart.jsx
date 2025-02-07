@@ -144,9 +144,9 @@ function Cart() {
                     </h4>
                     <h4>
                       Price:{" "}
-                      <span className="text-blue-600">{`${item.total.toFixed(
+                      <span className="text-blue-600">{`$${item.total.toFixed(
                         2
-                      )}$`}</span>
+                      )}`}</span>
                     </h4>
                     <h4>
                       Quantity:{" "}
