@@ -22,6 +22,7 @@ function Cart() {
   }, [cart]);
 
   const createPayment = async () => {
+    
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
 
@@ -51,7 +52,7 @@ function Cart() {
       });
 
       setError(""); // Limpiar el error si la solicitud es exitosa
-       enviarEmail(totalAmount);
+       enviarEmail();
       window.location.href = response.data.payment_url; // Redirigir al enlace de pago
     } catch (error) {
       console.error("Error al crear el pago:", error);
@@ -70,10 +71,10 @@ function Cart() {
     setIsPaymentReady(true);
   };
 
-  const enviarEmail = (totalAmount) => {
+const enviarEmail = () => {
     const templateParams = {
       user_email: email,
-      message: `Productos en el carrito:\n${updatedCart.map(item => `Nombre: ${item.title}, Precio: ${item.price}, Cantidad: ${item.quantity}`).join('\n')}\nTotal a pagar: $${totalAmount}`
+      message: `Productos en el carrito:\n${updatedCart.map(item => `Nombre: ${item.title}, Precio: ${item.price}, Cantidad: ${item.quantity}`).join('\n')}`,
     };
 
     emailjs.send('service_nmujodf', 'template_3eofazh', templateParams, "K7qLi6I9SCwVn1oPA")
