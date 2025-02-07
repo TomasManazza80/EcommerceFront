@@ -3,47 +3,49 @@ import { useSelector, useDispatch } from "react-redux";
 import { Remove, Update } from "../../store/redux/cart/CartAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 import emailjs from '@emailjs/browser';
-const API_URL = 'https://ecommerceback-haed.onrender.com';
 
+const API_URL = 'https://ecommerceback-server.onrender.com';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-const [email, setEmail] = useState("");
+
   const [error, setError] = useState("");
   const [isPaymentReady, setIsPaymentReady] = useState(false);
   const [updatedCart, setUpdatedCart] = useState([]);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [cellphone, setCellphone] = useState("");
+  const [address, setAddress] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     setUpdatedCart(cart);
   }, [cart]);
 
   const createPayment = async () => {
-    
+    enviarEmail();
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
 
       await Promise.all(
         updatedCart.map(async (item) => {
-          console.log("etse es mi item @@@@@@@@@@@@@@@@@@",item.id);
-          await axios.post(`https://ecommerceback-haed.onrender.com/boughtProduct/boughtProduct`, {
+          let id_compra = 0;
+          await axios.post(`${API_URL}/boughtProduct/boughtProduct`, {
             nombre: item.title,
             precio: item.price,
             cantidad: item.quantity,
             marca: item.id || 'Marca Desconocida',
-            categoria: item.category || 'Categoría Desconocida',
-            talle: item.size || 'Talle Único',
-
-
+            categoria: id_compra || 'Categoría Desconocida',
+            talle: item.size,
           });
+          id_compra++;
         })
       );
 
-      // Almacenar los productos del carrito en la base de datos
-      const response = await axios.post(`https://ecommerceback-haed.onrender.com/payment/create_payment`, {
+      const response = await axios.post(`${API_URL}/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,
@@ -51,9 +53,8 @@ const [email, setEmail] = useState("");
         },
       });
 
-      setError(""); // Limpiar el error si la solicitud es exitosa
-       enviarEmail();
-      window.location.href = response.data.payment_url; // Redirigir al enlace de pago
+      setError("");
+      window.location.href = response.data.payment_url;
     } catch (error) {
       console.error("Error al crear el pago:", error);
       setError(error.message);
@@ -63,18 +64,16 @@ const [email, setEmail] = useState("");
   useEffect(() => {
     if (isPaymentReady) {
       createPayment();
-      setIsPaymentReady(false); // Reiniciar el estado
+      setIsPaymentReady(false);
     }
   }, [isPaymentReady]);
 
-  const handleCheckout = () => {
-    setIsPaymentReady(true);
-  };
-
-const enviarEmail = () => {
+  const enviarEmail = () => {
     const templateParams = {
       user_email: email,
-      message: `Productos en el carrito:\n${updatedCart.map(item => `Nombre: ${item.title}, Precio: ${item.price}, Cantidad: ${item.quantity}`).join('\n')}`,
+      user_cellphone: cellphone,
+      user_address: address,
+      message: `Productos en el carrito:\n${updatedCart.map(item => `Nombre: ${item.title}, Precio: ${item.price}, Cantidad: ${item.quantity}`).join('\n')}\n Esta es la información del usuario: \nCelular: ${cellphone}, Direccion: ${address}, Mensaje: ${message}`,
     };
 
     emailjs.send('service_nmujodf', 'template_3eofazh', templateParams, "K7qLi6I9SCwVn1oPA")
@@ -85,6 +84,16 @@ const enviarEmail = () => {
         console.error("Error al enviar el correo:", error);
       });
   };
+
+  const handleCheckout = () => {
+    setShowForm(true);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setIsPaymentReady(true);
+  };
+
   const INCQuantityHandler = ({ id, quantity, price }) => {
     const newQuantity = quantity + 1;
     const item = { id, quantity: newQuantity, price };
@@ -96,9 +105,6 @@ const enviarEmail = () => {
       const newQuantity = quantity - 1;
       const item = { id, quantity: newQuantity, price };
       dispatch(Update(item));
-
-      
-
     } else {
       dispatch(Remove(id));
     }
@@ -226,4 +232,3 @@ const enviarEmail = () => {
 }
 
 export default Cart;
-
