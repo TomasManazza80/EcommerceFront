@@ -360,22 +360,23 @@ return (
               onChange={handleInputChange}
             />
           </div>
-          <div>
-            <label className="block font-medium mb-2">Categoría</label>
-            <select
-              name="categoria"
-              className="w-full p-2 border rounded"
-              value={nuevoProducto.categoria}
-              onChange={handleInputChange}
-            >
-              <option value="">Seleccionar Categoría</option>
-              {categorias.map((cat, index) => (
-                <option key={index} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
+         <div>
+  <label className="block font-medium mb-2">Categoría</label>
+  <input
+    type="text"
+    name="categoria"
+    className="w-full p-2 border rounded"
+    value={nuevoProducto.categoria}
+    onChange={handleInputChange}
+    list="categorias" // para mostrar sugerencias basadas en la lista de categorías
+  />
+  <datalist id="categorias">
+    {categorias.map((cat, index) => (
+      <option key={index} value={cat} />
+    ))}
+  </datalist>
+</div>
+
           <div>
             <label className="block font-medium mb-2">Cantidad</label>
             <input
