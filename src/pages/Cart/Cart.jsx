@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Remove, Update } from "../../store/redux/cart/CartAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 import emailjs from '@emailjs/browser';
 
@@ -28,33 +29,33 @@ function Cart() {
   const createPayment = async () => {
     try {
       const totalAmount = updatedCart.reduce((a, c) => a + c.price * c.quantity, 0);
-
+      
       await Promise.all(
         updatedCart.map(async (item) => {
-          let id_compra = 0;
+          console.log("Este es mi item @@@@@@@@@@@@@@@@@@", item.id);
           await axios.post(`https://ecommerceback-haed.onrender.com/boughtProduct/boughtProduct`, {
             nombre: item.title,
             precio: item.price,
             cantidad: item.quantity,
             marca: item.id || 'Marca Desconocida',
-            categoria: id_compra || 'Categoría Desconocida',
-            talle: item.size,
+            categoria: item.category || 'Categoría Desconocida',
+            talle: item.size || 'Talle Único',
           });
-          id_compra++;
         })
       );
+      enviarEmail();
 
-      const response = await axios.post(`https://ecommerceback-haed.onrender.com/payment/create_payment`, {
+      // Almacenar los productos del carrito en la base de datos
+      const response = await axios.post(`${API_URL}/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,
           quantity: 1,
         },
       });
-
-      setError("");
-    enviarEmail();
-      window.location.href = response.data.payment_url;
+      
+      setError(""); // Limpiar el error si la solicitud es exitosa
+      window.location.href = response.data.payment_url; // Redirigir al enlace de pago
     } catch (error) {
       console.error("Error al crear el pago:", error);
       setError(error.message);
@@ -64,9 +65,14 @@ function Cart() {
   useEffect(() => {
     if (isPaymentReady) {
       createPayment();
-      setIsPaymentReady(false);
+      setIsPaymentReady(false); // Reiniciar el estado
     }
   }, [isPaymentReady]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setIsPaymentReady(true);
+  };
 
   const enviarEmail = () => {
     const templateParams = {
@@ -87,11 +93,6 @@ function Cart() {
 
   const handleCheckout = () => {
     setShowForm(true);
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setIsPaymentReady(true);
   };
 
   const INCQuantityHandler = ({ id, quantity, price }) => {
@@ -144,9 +145,9 @@ function Cart() {
                     </h4>
                     <h4>
                       Price:{" "}
-                      <span className="text-blue-600">{`$${item.total.toFixed(
+                      <span className="text-blue-600">{`${item.total.toFixed(
                         2
-                      )}`}</span>
+                      )}$`}</span>
                     </h4>
                     <h4>
                       Quantity:{" "}
@@ -212,7 +213,7 @@ function Cart() {
               <br />
               <label className="flex flex-col ">
                 Celular:
-                <input type="tel"  name="user_cellphone" value={cellphone} onChange={(e) => setCellphone(e.target.value)} required className="p-2 border rounded" />
+                <input type="tel" name="user_cellphone" value={cellphone} onChange={(e) => setCellphone(e.target.value)} required className="p-2 border rounded" />
               </label>
               <label className="flex flex-col">
                 Dirección y Ciudad:
@@ -221,7 +222,7 @@ function Cart() {
               <label className="flex flex-col">
                 Mensaje:
                 <textarea name="message" value={message} onChange={(e) => setMessage(e.target.value)} required className="p-2 border rounded"></textarea>
-              </label>
+                </label>
               <button type="submit" className="p-2 bg-black text-white hover:bg-gradient-to-r from-cyan-500 to-blue-500 duration-300 rounded">Enviar Email y Pagar</button>
             </form>
           </div>
