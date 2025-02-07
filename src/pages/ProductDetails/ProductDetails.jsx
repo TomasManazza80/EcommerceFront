@@ -1,18 +1,19 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareMinus, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom"; // Importa 'Link'
 import axios from "axios";
-import { useParams, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Add } from "../../store/redux/cart/CartAction";
 import Swal from "sweetalert2";
-const API_URL = 'https://ecommerceback-haed.onrender.com';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
+
+const API_URL = 'https://ecommerceback-server.onrender.com';
 
 function ProductDetails() {
   const [data, setData] = useState({});
   const [quantity, setQuantity] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [hoveredProductId, setHoveredProductId] = useState(null); // Nuevo estado
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function ProductDetails() {
     id: data.ProductId,
     title: data.nombre,
     price: data.precio,
-    image: data.imagenes ? data.imagenes[0] : "", // Verificación adicional
+    image: data.imagenes ? data.imagenes[0] : "",
     quantity: quantity,
     total: data.precio * quantity,
   };
@@ -30,9 +31,15 @@ function ProductDetails() {
   console.log(cartSelecter);
 
   const fetch = async () => {
-    const res = await axios.get(`${API_URL}/products/products/${id}`);
+    const res = await axios.get(`${API_URL}/products/${id}`);
     console.log(res.data);
     setData(res.data);
+  };
+
+  const fetchProducts = async () => {
+    const res = await axios.get(`${API_URL}/products`);
+    console.log(res.data);
+    setProducts(res.data);
   };
 
   const inc = () => {
@@ -42,6 +49,7 @@ function ProductDetails() {
       alert("No puedes agregar más del stock disponible");
     }
   };
+
   const dec = () => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
@@ -68,9 +76,16 @@ function ProductDetails() {
     }
   };
 
+  const recargarPagina = () => {
+    window.location.reload();
+  };
+
   useEffect(() => {
     fetch();
+    fetchProducts();
   }, []);
+
+  const filteredProducts = products.filter((product) => product.categoria === data.categoria);
 
   return (
     <div className="w-full mt-12 bg-slate-100 p-4">
@@ -78,7 +93,7 @@ function ProductDetails() {
         <div className="p-4 rounded-2xl backdrop-blur-sm bg-white/30">
           {data.imagenes && data.imagenes[0] && (
             <img
-              src={data.imagenes[0]} // Verificación adicional
+              src={data.imagenes[0]}
               alt=""
               width="400px"
               height="200px"
@@ -122,8 +137,49 @@ function ProductDetails() {
           </div>
         </div>
       </div>
-      <div>
-        <Outlet />
+      <div className="mt-12">
+        <h1 className="text-3xl font-bold">Productos relacionados</h1>
+        <div className="flex flex-wrap justify-center mt-8">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.ProductId}
+              className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 relative"
+              onMouseEnter={() => setHoveredProductId(product.ProductId)}
+              onMouseLeave={() => setHoveredProductId(null)}
+              style={{
+                position: "relative",
+                transition: "0.3s",
+                ...(hoveredProductId === product.ProductId && { opacity: 0.7 }),
+              }}
+            >
+              <div className="border rounded-lg overflow-hidden shadow-lg bg-white">
+                <img src={product.imagenes[0]} alt={product.nombre} className="w-full h-64 object-cover" />
+                <div className="p-4">
+                  <h2 className="text-xl font-bold">{product.nombre}</h2>
+                  <p className="text-lg font-medium">${product.precio}</p>
+                </div>
+                {hoveredProductId === product.ProductId && (
+                  <button
+                    className="absolute inset-0 m-auto bg-black-500 text-white py-1 px-2 rounded" // Tamaño reducido
+                    style={{
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      height: "100px",
+                      width: "200px",
+                    }}
+                    onClick={() => {
+                      navigate(`/product/${product.ProductId}`);
+                      recargarPagina();
+                    }}
+                  >
+                    Ver Producto
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
