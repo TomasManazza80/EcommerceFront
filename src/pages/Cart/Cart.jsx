@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faSquareMinus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-
+import emailjs from '@emailjs/browser';
 const API_URL = 'https://ecommerceback-haed.onrender.com';
 
 
