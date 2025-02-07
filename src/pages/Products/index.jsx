@@ -11,12 +11,11 @@ const Products = () => {
   const [max, setMax] = useState("");
   const [category, setCategory] = useState("");
   const [showCategories, setShowCategories] = useState(false);
-  const API_URL = 'https://ecommerceback-haed.onrender.com';
-
+  const API_URL = 'https://ecommerceback-server.onrender.com';
 
   async function fetchProducts() {
     try {
-      const { data } = await axios.get(`https://ecommerceback-haed.onrender.com/products/products`);
+      const { data } = await axios.get(`${API_URL}/products`);
       const sortedData = data.sort(compareName);
       setProduct(sortedData);
       setFilterArray(sortedData);
@@ -53,6 +52,13 @@ const Products = () => {
     const name2 = b.nombre.toUpperCase();
     return name1 > name2 ? 1 : name1 < name2 ? -1 : 0;
   }
+
+  const uniqueProductsByCategory = filterArray.reduce((acc, current) => {
+    if (!acc.find((item) => item.categoria === current.categoria)) {
+      acc.push(current);
+    }
+    return acc;
+  }, []);
 
   return (
     <>
@@ -105,8 +111,7 @@ const Products = () => {
                     setCategory(cat);
                     setShowCategories(false);
                   }}
-                  className={`py-2 px-6 rounded ${category === cat ? "bg-indigo-700" : "bg-indigo-500"} text-white transition duration-200 hover:bg-indigo-600`}
-                  style={{ width: cat === '' ? '8rem' : '10rem' }}
+                  className={`py-2 px-6 rounded ${category === cat ? "bg-indigo-700" : "bg-indigo-500"} text-white transition duration-200                   hover:bg-indigo-600`}
                 >
                   {cat === '' ? 'Todos' : cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </button>
@@ -115,12 +120,12 @@ const Products = () => {
           )}
         </div>
         <div className="flex flex-wrap justify-center w-full px-6 md:w-auto">
-          {filterArray.length === 0 ? (
+          {uniqueProductsByCategory.length === 0 ? (
             <div className="m-4 p-4">
               <h1>Cargando...</h1>
             </div>
           ) : (
-            filterArray.map((item, index) => (
+            uniqueProductsByCategory.map((item, index) => (
               <ProductCart
                 key={index}
                 id={item.ProductId}
