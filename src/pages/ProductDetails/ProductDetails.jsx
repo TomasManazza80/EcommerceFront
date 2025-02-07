@@ -138,7 +138,7 @@ function ProductDetails() {
         </div>
       </div>
       <div className="mt-12">
-        <h1 className="text-3xl font-bold">Productos relacionados</h1>
+        <h1 className="text-3xl font-bold">TALLES Y COLORES</h1>
         <div className="flex flex-wrap justify-center mt-8">
           {filteredProducts.map((product) => (
             <div
