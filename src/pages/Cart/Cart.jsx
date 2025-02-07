@@ -12,7 +12,7 @@ const API_URL = 'https://ecommerceback-haed.onrender.com';
 function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
+const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [isPaymentReady, setIsPaymentReady] = useState(false);
   const [updatedCart, setUpdatedCart] = useState([]);
