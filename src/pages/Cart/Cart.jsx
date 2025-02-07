@@ -32,7 +32,7 @@ function Cart() {
       await Promise.all(
         updatedCart.map(async (item) => {
           let id_compra = 0;
-          await axios.post(`https://ecommerceback-server.onrender.com/boughtProduct/boughtProduct`, {
+          await axios.post(`https://ecommerceback-haed.onrender.com/boughtProduct/boughtProduct`, {
             nombre: item.title,
             precio: item.price,
             cantidad: item.quantity,
@@ -44,7 +44,7 @@ function Cart() {
         })
       );
 
-      const response = await axios.post(`https://ecommerceback-server.onrender.com/payment/create_payment`, {
+      const response = await axios.post(`https://ecommerceback-haed.onrender.com/payment/create_payment`, {
         product: {
           title: "Productos en el carrito",
           unit_price: totalAmount,
