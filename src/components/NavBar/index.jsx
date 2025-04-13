@@ -12,14 +12,13 @@ import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-const API_URL = 'https://ecommerceback-server.onrender.com';
+const API_URL = "https://ecommerceback-server.onrender.com";
 
 function Index() {
   const [toggle, setToggle] = useState(false);
   const authCtx = useContext(authContext);
-  const [Role, setRole] = useState(null);
-
-  const cartLenght = useSelector((state) => state.cart.length);
+  const [role, setRole] = useState(null);
+  const cartLength = useSelector((state) => state.cart.length);
 
   const signOutHandler = () => {
     localStorage.removeItem("token");
@@ -28,29 +27,24 @@ function Index() {
     closeNavbar();
   };
 
-  async function isAdmin(email) {
+  const isAdmin = async (email) => {
     const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const response = await axios.get(`${API_URL}/users/role/${email}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
-        const userRole = response.data.role;
-        return userRole === 'admin';
-      } catch (error) {
-        console.error(`Error retrieving user role: ${error}`);
-        return false;
-      }
+    if (!token) {
+      console.error("Token not found!");
+      return false;
     }
-    console.error('Token not found!!!!!!!!!!!!!!!!');
-    return false;
-  }
-  
-  const actualizarPagina = () => {
-    window.location.reload();
+
+    try {
+      const response = await axios.get(`${API_URL}/users/role/${email}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.role === "admin";
+    } catch (error) {
+      console.error(`Error retrieving user role: ${error}`);
+      return false;
+    }
   };
 
   const toggleHandler = () => {
@@ -61,54 +55,55 @@ function Index() {
     setToggle(false);
   };
 
-  const getToken = async () => {
+  const fetchUserRole = async () => {
     const token = localStorage.getItem("token");
-    authCtx.setToken(token);
-    const contenido = jwtDecode(token);
-    const role = await isAdmin(contenido.email);
-    contenido.role = role;
-    console.log("ESTE ES EL role<<<<<<<<<", role);
-    console.log("ESTE ES EL CONTENIDO!!!!!!!!!", contenido);
-    setRole(contenido.role);
-    return contenido.role;
+    if (!token) return;
+
+    try {
+      const decoded = jwtDecode(token);
+      const isAdminRole = await isAdmin(decoded.email);
+      setRole(isAdminRole);
+      authCtx.setToken(token);
+    } catch (error) {
+      console.error("Error decoding token or fetching role:", error);
+    }
   };
 
   useEffect(() => {
-    getToken();
+    fetchUserRole();
   }, []);
 
   return (
     <>
-      <div className=" ">
-        <div className=" container m-auto flex fixed top-0 right-0 left-0 p-2 max-lg:flex justify-between items-center backdrop-blur-sm bg-white/30 z-10  shadow-sm ">
+      <div className="">
+        <nav className="container m-auto flex fixed top-0 right-0 left-0 p-2 max-lg:flex justify-between items-center backdrop-blur-sm bg-white/30 z-10 shadow-sm">
           <div>
-            <img src={logo} alt="logo" className="h-20" />
+            <img src={logo} alt="logo" className="h-[60px] m-[0px]" />
           </div>
-          <div className=" max-lg:hidden">
-            <NavLink to="/" className="text-black  p-3 m-2 font-bold">
+          <div className="max-lg:hidden">
+            <NavLink to="/" className="text-black p-3 m-2 font-bold">
               Inicio
             </NavLink>
-            <NavLink to="/products" className="text-black  p-3 m-2 font-bold">
+            <NavLink to="/products" className="text-black p-3 m-2 font-bold">
               Productos
             </NavLink>
-            <NavLink to="/about" className="text-black   p-3 m-2 font-bold">
+            <NavLink to="/about" className="text-black p-3 m-2 font-bold">
               Información
             </NavLink>
-            <NavLink to="/contact" className="text-black   p-3 m-2 font-bold">
+            <NavLink to="/contact" className="text-black p-3 m-2 font-bold">
               Contacto
             </NavLink>
-            { Role === true ? (
+            {role && (
               <NavLink to="/admin" className="text-black p-3 m-2 font-bold">
                 Panel de Administración
               </NavLink>
-            ) : null}
+            )}
           </div>
           <div className="text-black max-lg:hidden">
-            <NavLink to="/cart" className="p-2 m-2 ">
+            <NavLink to="/cart" className="p-2 m-2">
               <FontAwesomeIcon icon={faCartShopping} />
-              <span className="p-1 rounded-full">{cartLenght}</span>
+              <span className="p-1 rounded-full">{cartLength}</span>
             </NavLink>
-
             {authCtx.token ? (
               <button
                 onClick={signOutHandler}
@@ -123,52 +118,61 @@ function Index() {
             )}
           </div>
           {toggle ? (
-            <>
-              <div className=" bg-white flex flex-col lg:hidden ">
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  className="text-black cursor-pointer lg:hidden"
-                  onClick={toggleHandler}
-                />
-                <NavLink to="/" className="text-black  p-3 m-2 font-bold" onClick={closeNavbar}>
-                  Inicio
-                </NavLink>
+            <div className="bg-white flex flex-col lg:hidden">
+              <FontAwesomeIcon
+                icon={faXmark}
+                className="text-black cursor-pointer lg:hidden"
+                onClick={toggleHandler}
+              />
+              <NavLink
+                to="/"
+                className="text-black p-3 m-2 font-bold"
+                onClick={closeNavbar}
+              >
+                Inicio
+              </NavLink>
+              <NavLink
+                to="/products"
+                className="text-black p-3 m-2 font-bold"
+                onClick={closeNavbar}
+              >
+                Productos
+              </NavLink>
+              <NavLink
+                to="/about"
+                className="text-black p-3 m-2 font-bold"
+                onClick={closeNavbar}
+              >
+                Información
+              </NavLink>
+              <NavLink
+                to="/contact"
+                className="text-black p-3 m-2 font-bold"
+                onClick={closeNavbar}
+              >
+                Contacto
+              </NavLink>
+              <NavLink to="/cart" className="p-2 m-2" onClick={closeNavbar}>
+                <FontAwesomeIcon icon={faCartShopping} />
+                <span className="p-1 rounded-full">{cartLength}</span>
+              </NavLink>
+              {authCtx.token ? (
+                <button
+                  onClick={signOutHandler}
+                  className="p-2 m-2 bg-black text-white"
+                >
+                  Logout
+                </button>
+              ) : (
                 <NavLink
-                  to="/products"
-                  className="text-black  p-3 m-2 font-bold"
+                  to="/login"
+                  className="p-2 m-2 bg-black text-white text-center"
                   onClick={closeNavbar}
                 >
-                  Productos
+                  Login
                 </NavLink>
-                <NavLink to="/about" className="text-black   p-3 m-2 font-bold" onClick={closeNavbar}>
-                  Información
-                </NavLink>
-                <NavLink to="/contact" className="text-black   p-3 m-2 font-bold" onClick={closeNavbar}>
-                  Contacto
-                </NavLink>
-                <NavLink to="/cart" className="p-2 m-2 " onClick={closeNavbar}>
-                  <FontAwesomeIcon icon={faCartShopping} />
-                  <span className="p-1 rounded-full">{cartLenght}</span>
-                </NavLink>
-                {authCtx.token ? (
-                  <button
-                    onClick={signOutHandler}
-                    className="p-2 m-2 bg-black text-white"
-                   
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <NavLink
-                    to="/login"
-                    className="p-2 m-2 bg-black text-white text-center"
-                    onClick={closeNavbar}
-                  >
-                    Login
-                  </NavLink>
-                )}
-              </div>
-            </>
+              )}
+            </div>
           ) : (
             <FontAwesomeIcon
               icon={faBars}
@@ -176,7 +180,7 @@ function Index() {
               onClick={toggleHandler}
             />
           )}
-        </div>
+        </nav>
         <div>
           <Outlet />
         </div>

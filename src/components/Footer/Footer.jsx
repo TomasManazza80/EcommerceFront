@@ -1,43 +1,82 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../images/logoBlanco.png";
-import gif from "../../images/img9.jpeg";
+import { FaFacebook, FaInstagram, FaTwitter, FaEnvelope, FaPhone } from "react-icons/fa";
 
 function Footer() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const handleSubscribe = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Por favor, ingresa un correo electrónico válido.");
+      return;
+    }
+    console.log("Subscribed with email:", email);
+    setEmailError("");
+    setEmail("");
+  };
+
   return (
-    <footer
-      style={{
-        backgroundImage: `url(${gif})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-      className="py-8 text-white"
-    >
-      <div className="container mx-auto flex flex-col items-center px-4 sm:px-6 md:px-8 lg:px-12 space-y-6">
-        <div className="flex justify-center">
-          <img
-            src={logo}
-            alt="Logo"
-            className="w-32 h-32"
-            style={{ margin: "0 auto",height: "auto",  width: "300px" }}
-          />
+    <footer className="bg-gray-900 text-white py-8 px-4 w-full" style={{ borderRadius: "20px" }}> 
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Columna 1: Logo e Información */}
+        <div className="flex flex-col items-center md:items-start">
+          <img src={logo} alt="Logo" className="w-[300px] h-auto " style={{ margin: "0 auto", padding: "0px" }}/>
+          <p className="text-sm text-gray-400 text-center md:text-left">
+            Tu destino para la moda y el estilo.
+          </p>
         </div>
-        <div className="flex justify-center space-x-4 md:space-x-6 text-lg sm:text-xl md:text-2xl flex-wrap">
-          <a href="https://facebook.com" aria-label="Facebook" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
-            <i className="fab fa-facebook"></i>
-          </a>
-          <a href="https://telegram.org" aria-label="Telegram" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
-            <i className="fab fa-telegram"></i>
-          </a>
-          <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition duration-300">
-            <i className="fab fa-instagram"></i>
-          </a>
+
+        {/* Columna 2: Enlaces de Interés */}
+        
+
+        {/* Columna 3: Información de Contacto y Redes Sociales */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Contacto</h3>
+          <div className="flex items-center mb-1">
+            <FaEnvelope className="mr-2" />
+            <a href="mailto:info@empresa.com" className="hover:text-gray-300 text-sm">
+              info@empresa.com
+            </a>
+          </div>
+          <div className="flex items-center mb-2">
+            <FaPhone className="mr-2" />
+            <a href="tel:+1234567890" className="hover:text-gray-300 text-sm">
+              +1234567890
+            </a>
+          </div>
+         
         </div>
-        <p className="text-sm sm:text-base md:text-lg lg:text-x text-center">
-          © {new Date().getFullYear()} Tomas Manazza. All rights reserved.
+
+        {/* Columna 4: Suscripción */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Suscríbete</h3>
+          <div className="flex flex-col">
+            <input
+              type="email"
+              placeholder="Tu correo electrónico"
+              className={`border border-gray-600 rounded-md px-3 py-2 bg-gray-800 text-gray-300 focus:outline-none focus:ring focus:border-blue-300 text-sm ${
+                emailError ? "border-red-500" : ""
+              }`}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+              className="bg-blue-600 text-white rounded-md px-4 py-2 mt-2 hover:bg-blue-700 text-sm"
+              onClick={handleSubscribe}
+            >
+              Suscribirse
+            </button>
+            {emailError && <p className="text-red-500 text-xs mt-1">{emailError}</p>}
+          </div>
+        </div>
+      </div>
+
+      {/* Derechos de Autor */}
+      <div className="text-center mt-6 border-t border-gray-800 pt-3">
+        <p className="text-xs text-gray-400">
+          © {new Date().getFullYear()} Tomas Manazza. Todos los derechos reservados.
         </p>
       </div>
     </footer>

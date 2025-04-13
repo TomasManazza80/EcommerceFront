@@ -19,11 +19,12 @@ function Hero() {
           <button className="hero-button">Comprar Ahora</button>
           <Link to="/" className="hero-link">Información</Link>
         </div>
-        <div className="hero-image">
+        <div className="hero-image" style={{position: 'relative', top: '20px'}}>
           <img src={BannerImage} alt="logo" />
         </div>
         <div className="hero-icon">
           <FontAwesomeIcon icon={faAngleDown} className="icon bounce" style={{ color: 'black' }} />
+          
         </div>
       </div>
     </>
